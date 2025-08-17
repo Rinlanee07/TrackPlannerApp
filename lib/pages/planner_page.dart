@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
+import 'home_page.dart';
+import 'summary_page.dart';
 
 class PlannerPage extends StatefulWidget {
   final List<Task> tasks;
   final Function(List<Task>) onTasksUpdated;
 
-  PlannerPage({required this.tasks, required this.onTasksUpdated});
+  // เพิ่ม super.key และ const
+  const PlannerPage({
+    super.key,
+    required this.tasks,
+    required this.onTasksUpdated,
+  });
 
   @override
-  _PlannerPageState createState() => _PlannerPageState();
+  PlannerPageState createState() => PlannerPageState();
 }
 
-class _PlannerPageState extends State<PlannerPage> {
+class PlannerPageState extends State<PlannerPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _hoursController = TextEditingController();
@@ -71,6 +78,24 @@ class _PlannerPageState extends State<PlannerPage> {
     widget.onTasksUpdated(widget.tasks);
   }
 
+  void _navigateTo(int index) {
+    if (index == 1) return; // อยู่หน้า Planner แล้ว
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
+    if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SummaryPage(tasks: widget.tasks),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +135,7 @@ class _PlannerPageState extends State<PlannerPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Add New Task',
+                    'พิ่มงานใหม่',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -118,17 +143,17 @@ class _PlannerPageState extends State<PlannerPage> {
                     ),
                   ),
                   SizedBox(height: 15),
-                  _buildTextField(_titleController, 'Task Title', Icons.title),
+                  _buildTextField(_titleController, 'ชื่องาน', Icons.title),
                   SizedBox(height: 12),
                   _buildTextField(
                     _descriptionController,
-                    'Description (Optional)',
+                    'รายละเอียด (ไม่บังคับ)',
                     Icons.description,
                   ),
                   SizedBox(height: 12),
                   _buildTextField(
                     _hoursController,
-                    'Estimated Hours',
+                    'ชั่วโมงโดยประมาณ',
                     Icons.access_time,
                     TextInputType.number,
                   ),
@@ -215,7 +240,7 @@ class _PlannerPageState extends State<PlannerPage> {
                             ),
                           ),
                           Text(
-                            'Add your first task above',
+                            'เพิ่มงานแรกของคุณ',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade500,
@@ -346,6 +371,26 @@ class _PlannerPageState extends State<PlannerPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Planner',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.analytics),
+            label: 'Summary',
+          ),
+        ],
+        currentIndex: 1,
+        selectedItemColor: Color(0xFFE1BEE7),
+        unselectedItemColor: Color(0xFF424242),
+        onTap: _navigateTo,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
     );
   }

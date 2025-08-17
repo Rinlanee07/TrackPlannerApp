@@ -1,0 +1,71 @@
+main.dart
+
+TrackPlannerApp (StatelessWidget)
+└── MaterialApp
+    └── HomePage
+
+1.HomePage
+
+Scaffold
+├── AppBar (title: Track Planner)
+├── Body → Container (LinearGradient BG)
+│   └── SafeArea
+│       └── Padding
+│           └── Column (centered)
+│               ├── Container (Card: Welcome Box)
+│               │   └── Column
+│               │       ├── Icon (schedule)
+│               │       ├── Text (Welcome to Track Planner)
+│               │       └── Text (Description)
+│               ├── Row (2 nav cards)
+│               │   ├── _buildNavCard (Plan Tasks)
+│               │   └── _buildNavCard (View Summary)
+│               └── if tasks.isNotEmpty → Container (Stats Box)
+│                   └── Row
+│                       ├── Stat: Total Tasks
+│                       ├── Divider
+│                       ├── Stat: Completed
+│                       ├── Divider
+│                       └── Stat: Pending
+└── BottomNavigationBar (Home, Planner, Summary)
+
+
+2.PlannerPage
+
+├── AppBar (title: Task Planner, back button)
+├── Body → Container (LinearGradient BG)
+│   └── Column
+│       ├── Container (Card: Add New Task)
+│       │   └── Column
+│       │       ├── Text (Add New Task)
+│       │       ├── TextField (Task Title)
+│       │       ├── TextField (Description)
+│       │       ├── TextField (Estimated Hours)
+│       │       ├── GestureDetector (Date Picker)
+│       │       └── ElevatedButton (Add Task)
+│       └── Expanded
+│           └── if tasks.isEmpty → Center (Icon + "No tasks yet")
+│               else → ListView.builder
+│                   └── Container (Task Card)
+│                       └── ListTile
+│                           ├── Leading: Circle Checkbox
+│                           ├── Title: Task Title
+│                           ├── Subtitle → Column
+│                           │   ├── Text (Description?)
+│                           │   └── Row (hours + date)
+│                           └── Trailing: Delete Button
+└── BottomNavigationBar (Home, Planner, Summary)
+
+
+3.SummaryPage
+
+Scaffold
+├── AppBar (title: Summary)
+├── Body → Center
+│   └── Container (Card)
+│       └── Column
+│           ├── Icon (assignment)
+│           ├── Text ("Total Planned Tasks")
+│           └── Text (tasks.length)
+└── BottomNavigationBar (Home, Planner, Summary)
+

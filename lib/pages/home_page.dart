@@ -4,44 +4,45 @@ import 'planner_page.dart';
 import 'summary_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+class HomePageState extends State<HomePage> {
+  int selectedIndex = 0;
   List<Task> tasks = [];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
 
-    switch (index) {
-      case 0:
-        // Already on Home
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PlannerPage(
-              tasks: tasks,
-              onTasksUpdated: (updatedTasks) {
-                setState(() {
-                  tasks = updatedTasks;
-                });
-              },
-            ),
+    _navigateTo(index);
+  }
+
+  void _navigateTo(int index) {
+    if (index == 0) return; // อยู่หน้า Home แล้ว
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlannerPage(
+            tasks: tasks,
+            onTasksUpdated: (updatedTasks) {
+              setState(() {
+                tasks = updatedTasks;
+              });
+            },
           ),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SummaryPage(tasks: tasks)),
-        );
-        break;
+        ),
+      );
+    }
+    if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SummaryPage(tasks: tasks)),
+      );
     }
   }
 
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Organize your tasks, track your time, and boost your productivity with our beautiful and intuitive planner.',
+                        'จัดการงานของคุณ ติดตามเวลา และเพิ่มประสิทธิภาพการทำงานด้วยแพลนเนอร์📝',
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xFF424242),
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: _buildNavCard(
                         'Plan Tasks',
-                        'Add and organize your daily tasks',
+                        'เพิ่มและจัดการงานประจำวันของคุณ',
                         Icons.add_task,
                         Color(0xFFF8BBD0),
                         () => _onItemTapped(1),
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: _buildNavCard(
                         'View Summary',
-                        'Track your progress and statistics',
+                        'ติดตามความก้าวหน้า',
                         Icons.analytics,
                         Color(0xFFB3E5FC),
                         () => _onItemTapped(2),
@@ -183,10 +184,10 @@ class _HomePageState extends State<HomePage> {
             label: 'Summary',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: 0,
         selectedItemColor: Color(0xFFE1BEE7),
         unselectedItemColor: Color(0xFF424242),
-        onTap: _onItemTapped,
+        onTap: _navigateTo,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         elevation: 10,
